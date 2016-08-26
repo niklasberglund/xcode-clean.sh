@@ -2,7 +2,7 @@
 
 archives_path=~/"Library/Developer/Xcode/Archives"
 derived_data_path=~/"Library/Developer/Xcode/DerivedData"
-simulator_data_path=~/"Library/Developer/CoreSimulator/Devices/"
+simulator_data_path=~/"Library/Developer/CoreSimulator/Devices"
 device_support_path=~/"Library/Developer/Xcode/iOS DeviceSupport"
 
 remove_archives=false

@@ -30,7 +30,7 @@ cat << EOF
     OPTIONS:
        -h      Show this help message
        -a      Removed all Xcode archives
-       -d      Removed everything in DerivedData folder
+       -d      Remove everything in DerivedData folder
        -s      Remove simulator data
        -A      Remove all of the above(archived, DerivedData and simulator data)
 

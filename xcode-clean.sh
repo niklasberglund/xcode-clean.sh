@@ -32,21 +32,21 @@ remove_contents() {
 
 usage() {
 cat << EOF
-    Usage: $0 [options]
+Usage: $0 [options]
 
-    Frees up disk space by removing Xcode data. NOTE: you might want to keep backups of the dsym files in ~/Library/Developer/Xcode/Archives
-    
-    EXAMPLE:
-        $0 -A
+Frees up disk space by removing Xcode data. NOTE: you might want to keep backups of the dSYM files in ~/Library/Developer/Xcode/Archives
 
-    OPTIONS:
-       -h           Show this help message
-       -a           Removed all Xcode archives
-       -d           Remove everything in DerivedData folder
-       -D           Remove everything in DeviceSupport folder
-       -s           Remove simulator data
-       -A           Remove all of the above(archived, DerivedData and simulator data)
-       --dry-run    Dry run mode prints which directories would be cleared but don't remove any files
+EXAMPLE:
+    $0 -A
+
+OPTIONS:
+   -h           Show this help message
+   -a           Removed all Xcode archives
+   -d           Remove everything in DerivedData folder
+   -D           Remove everything in DeviceSupport folder
+   -s           Remove simulator data
+   -A           Remove all of the above(archived, DerivedData and simulator data)
+   --dry-run    Dry run mode prints which directories would be cleared but don't remove any files
 
 EOF
 }

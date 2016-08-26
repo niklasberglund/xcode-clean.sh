@@ -1,5 +1,8 @@
 #!/bin/sh
 
+text_magenta=$(tput setaf 5)
+text_normal=$(tput sgr0)
+
 archives_path=~/"Library/Developer/Xcode/Archives"
 derived_data_path=~/"Library/Developer/Xcode/DerivedData"
 simulator_data_path=~/"Library/Developer/CoreSimulator/Devices"
@@ -10,14 +13,21 @@ remove_derived_data=false
 remove_device_support=false
 remove_simulator_data=false
 
+dry_run=false
+
 remove_contents() {
     arg_path=$1
     arg_name=$2
     
     size=$(du -hcs "$arg_path" | tail -1 | cut -f1 | xargs)
     
-    printf "Removing $arg_name in ${arg_path}* (freeing $size disk space)\n"
-    rm -R "$arg_path"/*
+    if $dry_run; then
+        printf "Clearing $arg_name in ${arg_path}/* would free up $size disk space\n"
+    else
+        printf "Clearing $arg_name in ${arg_path}/* (freeing $size disk space)\n"
+    fi
+    
+    #rm -R "$arg_path"/*
 }
 
 usage() {
@@ -30,19 +40,33 @@ cat << EOF
         $0 -A
 
     OPTIONS:
-       -h      Show this help message
-       -a      Removed all Xcode archives
-       -d      Remove everything in DerivedData folder
-       -D      Remove everything in DeviceSupport folder
-       -s      Remove simulator data
-       -A      Remove all of the above(archived, DerivedData and simulator data)
+       -h           Show this help message
+       -a           Removed all Xcode archives
+       -d           Remove everything in DerivedData folder
+       -D           Remove everything in DeviceSupport folder
+       -s           Remove simulator data
+       -A           Remove all of the above(archived, DerivedData and simulator data)
+       --dry-run    Dry run mode prints which directories would be cleared but don't remove any files
 
 EOF
 }
 
-while getopts "hadDsA" OPTION
+while getopts "hadDsA-:" OPTION
 do
     case $OPTION in
+    -)
+        case "${OPTARG}" in
+            dry-run)
+                dry_run=true
+                ;;
+            *)
+                if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
+                    usage
+                    exit 1
+                    #echo "Unknown option --${OPTARG}" >&2
+                fi
+                ;;
+        esac;;
         h)
             usage
             exit 0
@@ -71,6 +95,10 @@ do
             ;;
     esac
 done
+
+if $dry_run; then
+    printf "${text_magenta}Running in dry run mode. No files will be removed.${text_normal}\n"
+fi
 
 if $remove_archives; then
     remove_contents "$archives_path" "archives"

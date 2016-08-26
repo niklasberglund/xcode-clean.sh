@@ -3,9 +3,11 @@
 archives_path=~/"Library/Developer/Xcode/Archives"
 derived_data_path=~/"Library/Developer/Xcode/DerivedData"
 simulator_data_path=~/"Library/Developer/CoreSimulator/Devices/"
+device_support_path=~/"Library/Developer/Xcode/iOS DeviceSupport"
 
 remove_archives=false
 remove_derived_data=false
+remove_device_support=false
 remove_simulator_data=false
 
 remove_contents() {
@@ -31,13 +33,14 @@ cat << EOF
        -h      Show this help message
        -a      Removed all Xcode archives
        -d      Remove everything in DerivedData folder
+       -D      Remove everything in DeviceSupport folder
        -s      Remove simulator data
        -A      Remove all of the above(archived, DerivedData and simulator data)
 
 EOF
 }
 
-while getopts "hadsA" OPTION
+while getopts "hadDsA" OPTION
 do
     case $OPTION in
         h)
@@ -50,12 +53,16 @@ do
         d)
             remove_derived_data=true
             ;;
+        D)
+            remove_device_support=true
+            ;;
         s)
             remove_simulator_data=true
             ;;
         A)
             remove_archives=true
             remove_derived_data=true
+            remove_device_support=true
             remove_simulator_data=true
             ;;
         \?)
@@ -71,6 +78,10 @@ fi
 
 if $remove_derived_data; then
     remove_contents "$derived_data_path" "DerivedData content"
+fi
+
+if $remove_device_support; then
+    remove_contents "$device_support_path" "iOS DeviceSupport content"
 fi
 
 if $remove_simulator_data; then

@@ -67,32 +67,32 @@ do
                 fi
                 ;;
         esac;;
-        h)
-            usage
-            exit 0
-            ;;
-        a)
-            remove_archives=true
-            ;;
-        d)
-            remove_derived_data=true
-            ;;
-        D)
-            remove_device_support=true
-            ;;
-        s)
-            remove_simulator_data=true
-            ;;
-        A)
-            remove_archives=true
-            remove_derived_data=true
-            remove_device_support=true
-            remove_simulator_data=true
-            ;;
-        \?)
-            usage
-            exit 1
-            ;;
+    h)
+        usage
+        exit 0
+        ;;
+    a)
+        remove_archives=true
+        ;;
+    d)
+        remove_derived_data=true
+        ;;
+    D)
+        remove_device_support=true
+        ;;
+    s)
+        remove_simulator_data=true
+        ;;
+    A)
+        remove_archives=true
+        remove_derived_data=true
+        remove_device_support=true
+        remove_simulator_data=true
+        ;;
+    \?)
+        usage
+        exit 1
+        ;;
     esac
 done
 

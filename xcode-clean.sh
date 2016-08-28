@@ -13,6 +13,8 @@ remove_derived_data=false
 remove_device_support=false
 remove_simulator_data=false
 
+backup_dsyms=false
+dsym_backup_path=""
 dry_run=false
 
 remove_contents() {
@@ -30,6 +32,31 @@ remove_contents() {
     #rm -R "$arg_path"/*
 }
 
+do_dsym_backup() {
+    backup_path=$1
+    
+    cd "$archives_path"
+    
+    { find . -name "dSYMs" -exec printf '%s\0' {} + | while IFS= read -ru3 -d '' file; do
+      dsym_backup_file "$file"; done 3<&0 <&4 4<&-; } 4<&0
+}
+
+dsym_backup_file() {
+    path=$1
+    absolute_path="${archives_path}/${path}"
+    output_path="${backup_path}/${path}"
+    output_path=$(dirname "$output_path")
+    
+    if $dry_run; then
+        printf "Back up $absolute_path to $output_path\n"
+    else    
+        cd "$archives_path"
+        printf "Backing up $absolute_path to $output_path \n"
+        mkdir -p "$output_path" # Create dir(s) if it doesn't exist
+        cp -R "$absolute_path" "$output_path"
+    fi
+}
+
 usage() {
 cat << EOF
 Usage: $0 [options]
@@ -41,6 +68,7 @@ EXAMPLE:
 
 OPTIONS:
    -h           Show this help message
+   -b [path]    Backup dSYM files to specified path before removing archives
    -a           Removed all Xcode archives
    -d           Remove everything in DerivedData folder
    -D           Remove everything in DeviceSupport folder
@@ -51,12 +79,13 @@ OPTIONS:
 EOF
 }
 
-while getopts "hadDsA-:" OPTION
+while getopts "hadDsAb:-:" OPTION
 do
     case $OPTION in
     -)
         case "${OPTARG}" in
             dry-run)
+                value="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                 dry_run=true
                 ;;
             *)
@@ -89,6 +118,10 @@ do
         remove_device_support=true
         remove_simulator_data=true
         ;;
+    b)
+        backup_dsyms=true
+        dsym_backup_path="$OPTARG"
+        ;;
     \?)
         usage
         exit 1
@@ -98,6 +131,10 @@ done
 
 if $dry_run; then
     printf "${text_magenta}Running in dry run mode. No files will be removed.${text_normal}\n"
+fi
+
+if $backup_dsyms; then
+    do_dsym_backup "$dsym_backup_path"
 fi
 
 if $remove_archives; then

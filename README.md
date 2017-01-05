@@ -13,7 +13,7 @@ EXAMPLE:
 
 OPTIONS:
    -h           Show this help message
-   -a           Removed all Xcode archives
+   -a           Remove all Xcode archives
    -d           Remove everything in DerivedData folder
    -D           Remove everything in DeviceSupport folder
    -s           Remove simulator data

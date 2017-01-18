@@ -27,7 +27,7 @@ remove_contents() {
         printf "Clearing $arg_name in ${arg_path}/* would free up $size disk space\n"
     else
         printf "Clearing $arg_name in ${arg_path}/* (freeing $size disk space)\n"
-        rm -R "$arg_path"/*
+        rm -Rf "$arg_path"/*
     fi
 }
 

@@ -20,11 +20,12 @@ dry_run=false
 remove_contents() {
     arg_path=$1
     arg_name=$2
+    arg_flag_name=$3
     
     size=$(du -hcs "$arg_path" | tail -1 | cut -f1 | xargs)
     
     if $dry_run; then
-        printf "Clearing $arg_name in ${arg_path}/* would free up $size disk space\n"
+        printf "Clearing $arg_name($arg_flag_name flag) in ${arg_path}/* would free up $size disk space\n"
     else
         printf "Clearing $arg_name in ${arg_path}/* (freeing $size disk space)\n"
         rm -Rf "$arg_path"/*
@@ -137,17 +138,17 @@ if $backup_dsyms; then
 fi
 
 if $remove_archives; then
-    remove_contents "$archives_path" "archives"
+    remove_contents "$archives_path" "archives" "-a"
 fi
 
 if $remove_derived_data; then
-    remove_contents "$derived_data_path" "DerivedData content"
+    remove_contents "$derived_data_path" "DerivedData content" "-d"
 fi
 
 if $remove_device_support; then
-    remove_contents "$device_support_path" "iOS DeviceSupport content"
+    remove_contents "$device_support_path" "iOS DeviceSupport content" "-D"
 fi
 
 if $remove_simulator_data; then
-    remove_contents "$simulator_data_path" "simulator data"
+    remove_contents "$simulator_data_path" "simulator data" "-s"
 fi

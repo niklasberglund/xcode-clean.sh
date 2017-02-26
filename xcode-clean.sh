@@ -1,6 +1,7 @@
 #!/bin/sh
 
 text_magenta=$(tput setaf 5)
+text_bold=$(tput bold)
 text_normal=$(tput sgr0)
 
 archives_path=~/"Library/Developer/Xcode/Archives"
@@ -25,9 +26,9 @@ remove_contents() {
     size=$(du -hcs "$arg_path" | tail -1 | cut -f1 | xargs)
     
     if $dry_run; then
-        printf "Clearing $arg_name($arg_flag_name flag) in ${arg_path}/* would free up $size disk space\n"
+        printf "Clearing $arg_name($arg_flag_name flag) in ${arg_path}/* would free up ${text_bold}${size}${text_normal} disk space\n"
     else
-        printf "Clearing $arg_name in ${arg_path}/* (freeing $size disk space)\n"
+        printf "Clearing $arg_name in ${arg_path}/* (freeing ${text_bold}${size}${text_normal} disk space)\n"
         rm -Rf "$arg_path"/*
     fi
 }
